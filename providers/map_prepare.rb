@@ -53,8 +53,8 @@ def prepare(exec_action)
     user    new_resource.user if new_resource.user
     cwd     cwd
     timeout new_resource.timeout
-    command "#{command} #{map_stripped_path}.osrm -r #{map_stripped_path}.osrm.restrictions -p #{profile_dir}/#{new_resource.profile}.lua"
-    not_if  { ::File.exists?("#{map_stripped_path}.osrm.edges") }
+    command "#{command} #{map_stripped_path}.osrm -p #{profile_dir}/#{new_resource.profile}.lua"
+    not_if  { ::File.exists?("#{map_stripped_path}.osrm.hsgr") }
   end
 
   # cleanup previously extracted files (not needed anymore)
