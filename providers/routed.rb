@@ -57,11 +57,18 @@ action :create do
     system true
   end
 
+  if node['lsb']['codename'] == 'trusty'
+    init_path = "/etc/init/#{service_name}.conf"
+    init_source = 'upstart.conf.erb'
+  else
+    init_path = "/etc/systemd/system/#{service_name}.service"
+    init_source = 'systemd.conf.erb'
+  end
 
-  # deploy upstart script
-  template "/etc/init/#{service_name}.conf" do
+  # deploy init script
+  template init_path do
     mode      00644
-    source    'upstart.conf.erb'
+    source    init_source
     cookbook  'osrm'
     variables description: 'OSRM route daemon',
               daemon:      "#{daemon} -c #{config_file} #{map_file} -p #{new_resource.port}",
@@ -70,6 +77,7 @@ action :create do
 
   link "/etc/init.d/#{service_name}" do
     to '/lib/init/upstart-job'
+    only_if { node['lsb']['codename'] == 'trusty' }
   end
 
   service service_name do
