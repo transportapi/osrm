@@ -1,0 +1,17 @@
+[Unit]
+Description=<%= @description %>
+
+[Service]
+<% if @user -%>
+User=<%= @user %>
+<% end -%>
+<% if @env -%>
+Environment=<%= @env %>
+<% end -%>
+<% if @chdir -%>
+WorkingDirectory=<%= @chdir %>
+<% end -%>
+ExecStart=<%= @daemon %>
+
+[Install]
+WantedBy=multi-user.target
